@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  NON_BINARY
+  OTHER
+}
+
+model Extra {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Identity
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String?
+  gender      Gender?
+  genderNote  String?
+  dateOfBirth DateTime?
+  nationality String?
+  languages   String[] @default([])
+
+  // Location
+  city       String?
+  postalCode String?
+  country    String? @default("BE")
+
+  // Sizes (metric)
+  heightCm     Int?
+  weightKg     Int?
+  clothingSize String?
+  chestCm      Int?
+  waistCm      Int?
+  hipsCm       Int?
+  shoeSizeEu   Int?
+  hairColor    String?
+  hairLength   String?
+  eyeColor     String?
+  tattoos      Boolean @default(false)
+  piercings    Boolean @default(false)
+  facialHair   String?
+
+  // Booking
+  dayRateEur  Decimal? @db.Decimal(10, 2)
+  hourRateEur Decimal? @db.Decimal(10, 2)
+  hasDriversLicense Boolean @default(false)
+  hasCar            Boolean @default(false)
+  available         Boolean @default(true)
+  notes             String?
+
+  photos   Photo[]
+  bookings Booking[]
+
+  @@index([lastName, firstName])
+  @@index([city])
+  @@index([gender])
+}
+
+model Photo {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  extraId   String
+  extra     Extra    @relation(fields: [extraId], references: [id], onDelete: Cascade)
+  url       String
+  pathname  String
+  caption   String?
+  isPrimary Boolean  @default(false)
+  sortOrder Int      @default(0)
+
+  @@index([extraId])
+}
+
+model Production {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  name      String
+  client    String?
+  year      Int?
+  notes     String?
+  bookings  Booking[]
+
+  @@index([name])
+}
+
+model Booking {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  extraId      String
+  extra        Extra      @relation(fields: [extraId], references: [id], onDelete: Cascade)
+  productionId String
+  production   Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
+  role         String?
+  date         DateTime?
+  feeEur       Decimal?   @db.Decimal(10, 2)
+  notes        String?
+
+  @@index([extraId])
+  @@index([productionId])
+}
