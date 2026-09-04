@@ -62,3 +62,15 @@ npx prisma db push
 ```
 
 `prisma generate` runs automatically after every `npm install`.
+
+## Privacy note
+
+The Blob store is created with `--access public`. Photo URLs contain a random suffix and
+are not listed anywhere, but anyone who has a URL can open it without logging in. Since
+these are photos of real people, consider switching the store to `--access private` and
+serving presigned URLs if that is not acceptable for Crowdproductions.
+
+The app also stores personal data (contact details, date of birth, body measurements),
+so the usual GDPR housekeeping applies: keep the password to the people who need it, and
+delete profiles when an extra asks you to — deleting an extra also deletes their photos
+from Blob.
