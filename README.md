@@ -28,10 +28,10 @@ Neon Postgres · Vercel Blob.
 | `APP_PASSWORD` | The password the team types on the login screen. |
 | `SESSION_SECRET` | Secret that signs the session cookie. `openssl rand -base64 32`. |
 | `DATABASE_URL` | Neon **pooled** connection string. |
-| `DIRECT_URL` | Neon **unpooled** connection string — used by `prisma db push`/migrations. |
+| `DATABASE_URL_UNPOOLED` | Neon **unpooled** connection string — used by `prisma db push`/migrations. |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob store token. |
 
-`DATABASE_URL`, `DIRECT_URL` and `BLOB_READ_WRITE_TOKEN` are injected automatically on
+`DATABASE_URL`, `DATABASE_URL_UNPOOLED` and `BLOB_READ_WRITE_TOKEN` are injected automatically on
 Vercel once the Neon and Blob stores are connected to the project. `APP_PASSWORD` and
 `SESSION_SECRET` you set yourself.
 
