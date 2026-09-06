@@ -74,3 +74,22 @@ The app also stores personal data (contact details, date of birth, body measurem
 so the usual GDPR housekeeping applies: keep the password to the people who need it, and
 delete profiles when an extra asks you to — deleting an extra also deletes their photos
 from Blob.
+
+## Deploying
+
+Once the Vercel GitHub App has access to this private repository, pushing to `main`
+deploys automatically and `vercel deploy --prod` works from the project directory.
+
+If a deployment is created but never builds (status stays `UNKNOWN`, no build logs,
+and `vercel redeploy` answers *"This deployment can not be redeployed"*), Vercel could
+not fetch the repository. Grant the Vercel GitHub App access to
+`steijehillewaert/crowd-caster` at https://github.com/apps/vercel/installations/select_target
+and redeploy.
+
+As a stopgap, a deploy made from outside a git checkout uploads the source directly and
+builds fine:
+
+```bash
+rsync -a --exclude node_modules --exclude .next --exclude .git --exclude '.env*' ./ /tmp/cc-deploy/
+cd /tmp/cc-deploy && vercel deploy --prod --yes
+```
