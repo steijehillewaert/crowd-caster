@@ -77,15 +77,18 @@ from Blob.
 
 ## Deploying
 
-Pushing to `main` deploys to production, and `vercel deploy --prod` works from the
-project directory.
+Deploy with `vercel deploy --prod` from the project directory.
 
-Note that Vercel could not build this project while the GitHub repository was private:
+Pushing to `main` does **not** deploy on its own: that needs the Vercel GitHub App
+installed on the repository, which it is not.
+
+Vercel also could not build this project at all while the repository was private —
 deployments were created but never built (status stuck on `UNKNOWN`, no build logs, and
 `vercel redeploy` answered *"This deployment can not be redeployed"*). Making the
-repository public fixed it. If it is ever made private again, either grant the Vercel
-GitHub App access to the repository or deploy from a copy of the source outside the git
-checkout, which uploads the files directly:
+repository public fixed that, because Vercel can clone a public repository without the
+App. If it is ever made private again, either install the Vercel GitHub App on it or
+deploy from a copy of the source outside the git checkout, which uploads the files
+directly:
 
 ```bash
 rsync -a --exclude node_modules --exclude .next --exclude .git --exclude '.env*' ./ /tmp/cc-deploy/
