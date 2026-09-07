@@ -77,17 +77,15 @@ from Blob.
 
 ## Deploying
 
-Once the Vercel GitHub App has access to this private repository, pushing to `main`
-deploys automatically and `vercel deploy --prod` works from the project directory.
+Pushing to `main` deploys to production, and `vercel deploy --prod` works from the
+project directory.
 
-If a deployment is created but never builds (status stays `UNKNOWN`, no build logs,
-and `vercel redeploy` answers *"This deployment can not be redeployed"*), Vercel could
-not fetch the repository. Grant the Vercel GitHub App access to
-`steijehillewaert/crowd-caster` at https://github.com/apps/vercel/installations/select_target
-and redeploy.
-
-As a stopgap, a deploy made from outside a git checkout uploads the source directly and
-builds fine:
+Note that Vercel could not build this project while the GitHub repository was private:
+deployments were created but never built (status stuck on `UNKNOWN`, no build logs, and
+`vercel redeploy` answered *"This deployment can not be redeployed"*). Making the
+repository public fixed it. If it is ever made private again, either grant the Vercel
+GitHub App access to the repository or deploy from a copy of the source outside the git
+checkout, which uploads the files directly:
 
 ```bash
 rsync -a --exclude node_modules --exclude .next --exclude .git --exclude '.env*' ./ /tmp/cc-deploy/
